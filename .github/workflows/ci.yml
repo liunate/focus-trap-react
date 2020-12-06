@@ -50,20 +50,33 @@ jobs:
 
       - name: Build # Tests to see if a build can succeed
         run: yarn build
-  e2e:
+  e2e-firefox:
     runs-on: ubuntu-latest
-    container: cypress/included:5.0.0
-    strategy:
-      matrix:
-        browser: [chrome] # cypress executable says 'Browser: 'firefox' was not found on your system or is not supported by Cypress.' seems to be defect
+    container:
+      image: cypress/included:5.0.0
+      options: --user 1001
     env:
-      CYPRESS_BROWSER: ${{ matrix.browser }}
+      CYPRESS_BROWSER: firefox
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@master
-
-      - name: Install dependencies 📦
-        uses: bahmutov/npm-install@v1
-
-      - name: Run tests 🧪
-        run: yarn test:cypress-ci
+      - uses: actions/checkout@v1
+      - run: yarn start
+      - uses: cypress-io/github-action@v2.6.1
+        with:
+          browser: firefox
+#  e2e:
+#    runs-on: ubuntu-latest
+#    container: cypress/included:5.0.0
+#    strategy:
+#      matrix:
+#        browser: [chrome] # cypress executable says 'Browser: 'firefox' was not found on your system or is not supported by Cypress.' seems to be defect
+#    env:
+#      CYPRESS_BROWSER: ${{ matrix.browser }}
+#    steps:
+#      - name: Checkout 🛎
+#        uses: actions/checkout@master
+#
+#      - name: Install dependencies 📦
+#        uses: bahmutov/npm-install@v1
+#
+#      - name: Run tests 🧪
+#        run: yarn test:cypress-ci
