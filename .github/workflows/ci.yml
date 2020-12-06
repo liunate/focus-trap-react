@@ -2,8 +2,8 @@ name: CI
 
 on:
   push:
-#    branches:
-#      - 'master'
+  #    branches:
+  #      - 'master'
   pull_request:
 
 jobs:
@@ -53,30 +53,25 @@ jobs:
   e2e-firefox:
     runs-on: ubuntu-latest
     container:
-      image: cypress/included:5.0.0
+      image: cypress/included:6.0.1
       options: --user 1001
     env:
       CYPRESS_BROWSER: firefox
     steps:
       - uses: actions/checkout@v1
-      - run: yarn start
       - uses: cypress-io/github-action@v2.6.1
         with:
+          start: yarn start
           browser: firefox
-#  e2e:
-#    runs-on: ubuntu-latest
-#    container: cypress/included:5.0.0
-#    strategy:
-#      matrix:
-#        browser: [chrome] # cypress executable says 'Browser: 'firefox' was not found on your system or is not supported by Cypress.' seems to be defect
-#    env:
-#      CYPRESS_BROWSER: ${{ matrix.browser }}
-#    steps:
-#      - name: Checkout 🛎
-#        uses: actions/checkout@master
-#
-#      - name: Install dependencies 📦
-#        uses: bahmutov/npm-install@v1
-#
-#      - name: Run tests 🧪
-#        run: yarn test:cypress-ci
+  e2e-chrome:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/included:6.0.1
+    env:
+      CYPRESS_BROWSER: chrome
+    steps:
+      - uses: actions/checkout@v1
+      - uses: cypress-io/github-action@v2.6.1
+        with:
+          start: yarn start
+          browser: chrome
